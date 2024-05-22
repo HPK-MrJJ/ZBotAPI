@@ -15,7 +15,7 @@ class Roles(red_commands.Cog):
         self.bot = bot
 
     @is_owner_overridable()    
-    @discord_commands.command()
+    @red_commands.command()
     async def add_role(self, ctx, role, username):
         await ctx.send(f"Adding role {role} to user {username} now!")
         
