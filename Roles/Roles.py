@@ -1,5 +1,6 @@
 from redbot.core import commands as red_commands
 from discord.ext import commands as discord_commands
+from discord.ext.commands import errors
 import discord
 
 def is_owner_overridable():
