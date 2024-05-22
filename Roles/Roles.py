@@ -13,7 +13,7 @@ class Roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @is_owner_overridable    
+    @is_owner_overridable()    
     @commands.command(name="add_role")
     async def add_role(self,ctx,role):
         await ctx.send(f"adding role {role} to user {ctx.message.author} now!")
