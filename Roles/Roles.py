@@ -24,13 +24,15 @@ class Roles(red_commands.Cog):
             if var is None:
                 raise ValueError("Role not found.")
         except Exception as e:
-            await ctx.send(f"{e}\n Please give a valid role name.")
+            await ctx.send("Please give a valid role name.")
             return
         
         member = ctx.guild.get_member_named(username) # Member object that you want to add the role to
         if member is None:
             await ctx.send(f"Member {username} not found.")
             return
-        
-        await member.add_roles(var) # Adds the role to the member
+        try:
+            await member.add_roles(var) # Adds the role to the member
+        except CommandInvokeError as e:
+            await ctx.send("You can not give members that role.")
         await ctx.send(f"Role {role} has been added to {username}.")
