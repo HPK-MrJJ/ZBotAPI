@@ -36,4 +36,5 @@ class Roles(red_commands.Cog):
             await member.add_roles(var) # Adds the role to the member
         except discord.errors.Forbidden as e:
             await ctx.send("You can not give members that role.")
+            return
         await ctx.send(f"Role {role} has been added to {username}.")
