@@ -1,4 +1,4 @@
-from Roles import Roles
+from .Roles import Roles
 
 
 async def setup(bot):
