@@ -9,7 +9,7 @@ def is_owner_overridable():
         return False
     return red_commands.permissions_check(predicate)
     
-class Roles(discord_commands.Cog):
+class Roles(red_commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
