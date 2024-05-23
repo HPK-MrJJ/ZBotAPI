@@ -39,7 +39,7 @@ class Roles(red_commands.Cog):
             return
         await ctx.send(f"Role {role} has been added to {username}.")
         
-    @commands.Cog.listener()
+    @red_commands.Cog.listener()
     async def on_message(self, message):
         first_char = message.content[0]
         if not first_char.isalpha():
