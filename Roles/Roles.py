@@ -47,7 +47,7 @@ class Roles(red_commands.Cog):
 
         # Check if the message contains the trigger phrase
         if 'fuck you zalora-bot' in message.content.lower():
-            # Respond to the message
             await message.reply('Well fuck you too!')
+            
         if 'best wishes to Montrandec' in message.content.lower() or 'best wishes to r9238yfh' in message.content.lower() or f'best wishes to {ctx.guild.get_member_named(r9238yfh)}' in message.content.lower():
             await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
