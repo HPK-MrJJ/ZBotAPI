@@ -76,6 +76,8 @@ class Roles(red_commands.Cog):
 
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
+                channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
+                await message.channel.send(match) for match in matches # THIS IS FOR ERROR TESTING
                 
                 for match in matches:
                     if ' - ' in match[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
@@ -109,9 +111,6 @@ class Roles(red_commands.Cog):
                         await add_role(ctx.guild,ctx.channel, 'Plutonium', name)
                         role_changed_to = 'Plutonium'
                         role_purged = await purge_roles(ctx.guild, name)
-                    
-                    # find the bot-action-logs channel 
-                    channel = discord.utils.get(message.guild.channels, name="bot-actions-log")
 
                     # log the role change
                     if role_purged:
