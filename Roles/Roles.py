@@ -86,26 +86,26 @@ class Roles(red_commands.Cog):
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
                     member_roles = message.guild.get_member(message.author.id).roles
-                    if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in member_roles :
+                    if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in member_roles) :
                         await add_role(ctx.guild, ctx.channel, 'Investor', name)
                         role_changed_to = 'Investor'
-                    if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in member_roles:
+                    if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in member_roles):
                         await add_role(ctx.guild, ctx.channel, 'Bronze', name)
                         role_changed_to = 'Bronze'
                         role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in member_roles:
+                    elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in member_roles):
                         await add_role(ctx.guild,ctx.channel, 'Silver', name)
                         role_changed_to = 'Silver'
                         role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in member_roles:
+                    elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in member_roles):
                         await add_role(ctx.guild,ctx.channel, 'Gold', name)
                         role_changed_to = 'Gold'
                         role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in member_roles:
+                    elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in member_roles):
                         await add_role(ctx.guild,ctx.channel, 'Platinum', name)
                         role_changed_to = 'Platinum'
                         role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 2000 and not any(role.name == 'Plutonium' for role in member_roles:
+                    elif amount >= 2000 and not any(role.name == 'Plutonium' for role in member_roles):
                         await add_role(ctx.guild,ctx.channel, 'Plutonium', name)
                         role_changed_to = 'Plutonium'
                         role_purged = await purge_roles(ctx.guild, name)
