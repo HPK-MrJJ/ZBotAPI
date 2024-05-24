@@ -77,14 +77,14 @@ class Roles(red_commands.Cog):
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
                 channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
-                await message.channel.send(match) for match in matches # THIS IS FOR ERROR TESTING
+                await message.channel.send(matchhh) for matchhh in matches # THIS IS FOR ERROR TESTING
                 
-                for match in matches:
-                    if ' - ' in match[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
-                        name = match[0].split(' - ')[1].strip().lower()
+                for matchh in matches:
+                    if ' - ' in matchh[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
+                        name = matchh[0].split(' - ')[1].strip().lower()
                     else:
-                        name = match[0]  # server name
-                    amount = float(match[1]) # number of shares
+                        name = matchh[0]  # server name
+                    amount = float(matchh[1]) # number of shares
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
                     member_roles = message.guild.get_member(message.author.id).roles
