@@ -1,8 +1,8 @@
-from redbot.core import commands as red_commands
+import re
+import discord
 from discord.ext import commands as discord_commands
 from discord.ext.commands import errors
-import discord
-import re
+from redbot.core import commands as red_commands
 
 def is_owner_overridable():
     # Similar to @commands.is_owner()
@@ -40,15 +40,19 @@ class Roles(red_commands.Cog):
         await channel.send(f"Role {role_name} has been added to {username}.")
 
     # purge excess tier roles
-    asyc def purge_roles(self, guild, username):
+    # Returns the string name of the Role purged or ''
+    async def purge_roles(self, guild, username):
         tier_roles = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Plutonium']
         has_role_ids = [] # stores the indexes that correspond to tier roles above that the member has
-        end_role = None
-        for role.name in guild.get_member_named(username).roles: # iterate through every role
+        member = await guild.get_member_named(username).roles
+        for role.name in member : # iterate through every role
             if role.name in tier_roles: 
                 has_role_ids.append(tier_roles.index(role.name)) # if the role is a tier role, add its index to the tracker
         if len(has_role_ids) > 1:
-            end_role = # here get rid of lower role... (I have to go to bed now :( )
+            rid_role_id = min(has_role_ids) # the id of the role to be purged
+            role_be_gone = discord.util.get(guild.roles, name=tier_roles[rid_role_id])
+            await member.remove_roles(role_be_gone) # purge the excess tier role
+        return role_be_gone.name if role_be_gone else ''
     
     @red_commands.Cog.listener()
     async def on_message(self, message):
@@ -78,10 +82,7 @@ class Roles(red_commands.Cog):
                         name = match[0].split(' - ')[1].strip().lower()
                     else:
                         name = match[0]  # server name
-                    amount = int(match[1]) # number of shares
-
-                    # remembering what role the bot changed to
-                    role_changed_to = None
+                    amount = float(match[1]) # number of shares
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
                     if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in message.guild.get_member(message.author.id).roles) :
@@ -90,21 +91,28 @@ class Roles(red_commands.Cog):
                     if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in message.guild.get_member(message.author.id).roles):
                         add_role(ctx.guild, ctx.channel, 'Bronze', name)
                         role_changed_to = 'Bronze'
+                        role_purged = purge_roles(ctx.guild, name)
                     elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in message.guild.get_member(message.author.id).roles):
                         add_role(ctx.guild,ctx.channel, 'Silver', name)
                         role_changed_to = 'Silver'
+                        role_purged = purge_roles(ctx.guild, name)
                     elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in message.guild.get_member(message.author.id).roles):
                         add_role(ctx.guild,ctx.channel, 'Gold', name)
                         role_changed_to = 'Gold'
+                        role_purged = purge_roles(ctx.guild, name)
                     elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in message.guild.get_member(message.author.id).roles):
                         add_role(ctx.guild,ctx.channel, 'Platinum', name)
                         role_changed_to = 'Platinum'
+                        role_purged = purge_roles(ctx.guild, name)
                     elif amount >= 2000 and not any(role.name == 'Plutonium' for role in message.guild.get_member(message.author.id).roles):
                         add_role(ctx.guild,ctx.channel, 'Plutonium', name)
                         role_changed_to = 'Plutonium'
+                        role_purged = purge_roles(ctx.guild, name)
                     
                     # find the bot-action-logs channel 
                     channel = discord.utils.get(message.guild.channels, name="bot-actions-log")
 
                     # log the role change
-                    await message.channel.send(f'Assigned {role_changed_to} to {name}.')
+                    if role_purged:
+                        await message.channel.send(f'Assigned {role_changed_to} to {name}.') if role_purged != '' else message.channel.send(f'Switched {name} from {role_purged} to {role_changed_to}.')
+                    
