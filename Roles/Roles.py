@@ -72,7 +72,7 @@ class Roles(red_commands.Cog):
             if 'share report as of ' in message.content.lower():
                 
                 # This pattern isolates blocks in the share-report for each shareholder
-                pattern = r'([\w-]+)\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
+                pattern = r'\*\*(\w+(?:\s+\w+)*)\*\*\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
 
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
