@@ -52,7 +52,7 @@ class Roles(red_commands.Cog):
         if 'best wishes to montrandec' in message.content.lower() or 'best wishes to r9238yfh' in message.content.lower() in message.content.lower():
             await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
 
-        if message.channel.id == 1202487727635832862 #This is the id of the share-report channel :
+        if message.channel.id == 1202487727635832862: #This is the id of the share-report channel
             if 'share report as of ' in message.content.lower():
                 
                 # This pattern isolates blocks in the share-report for each shareholder
