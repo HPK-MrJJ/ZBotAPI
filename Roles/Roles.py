@@ -77,7 +77,8 @@ class Roles(red_commands.Cog):
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
                 channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
-                await message.channel.send(matchhh) for matchhh in matches # THIS IS FOR ERROR TESTING
+                for matchhh in matches:
+                    await message.channel.send(matchhh) # THIS IS FOR ERROR TESTING
                 
                 for matchh in matches:
                     if ' - ' in matchh[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
