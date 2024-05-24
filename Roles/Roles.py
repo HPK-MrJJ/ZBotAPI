@@ -15,7 +15,8 @@ class Roles(red_commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
+    
+    # only available to the bot
     async def add_role(self, guild, channel, role_name, username):
         await channel.send(f"Attempting to add role {role_name} to user {username} now!")
         
@@ -26,7 +27,7 @@ class Roles(red_commands.Cog):
         except Exception as e:
             await channel.send("Please give a valid role name.")
             return
-        
+            
         member = guild.get_member_named(username)  # Member object that you want to add the role to
         if member is None:
             await channel.send(f"Member {username} not found.")
@@ -37,7 +38,18 @@ class Roles(red_commands.Cog):
             await channel.send("You can not give members that role.")
             return
         await channel.send(f"Role {role_name} has been added to {username}.")
-        
+
+    # purge excess tier roles
+    asyc def purge_roles(self, guild, username):
+        tier_roles = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Plutonium']
+        has_role_ids = [] # stores the indexes that correspond to tier roles above that the member has
+        end_role = None
+        for role.name in guild.get_member_named(username).roles: # iterate through every role
+            if role.name in tier_roles: 
+                has_role_ids.append(tier_roles.index(role.name)) # if the role is a tier role, add its index to the tracker
+        if len(has_role_ids) > 1:
+            end_role = # here get rid of lower role... (I have to go to bed now :( )
+    
     @red_commands.Cog.listener()
     async def on_message(self, message):
         first_char = message.content[0]
