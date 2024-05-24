@@ -65,13 +65,13 @@ class Roles(red_commands.Cog):
         if 'fuck you zalora-bot' in message.content.lower():
             await message.reply('Well fuck you too!')
             
-        if 'best wishes to montrandec' in message.content.lower() or 'best wishes to r9238yfh' in message.content.lower() in message.content.lower():
+        if 'best wishes to montrandec' in message.content.lower() or 'best wishes to r9238yfh' in message.content.lower():
             await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
 
         if message.channel.id == 1202487727635832862: #This is the id of the share-report channel
             if 'share report as of ' in message.content.lower():
                 
-                # This pattern isolates blocks in the share-report for each shareholder
+                # This pattern isolates blocks in the share-report for each shareholder assuming bolded names
                 pattern = r'\*\*(\w+(?:\s+\w+)*)\*\*\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
 
                 # Find all matches in the content
@@ -85,29 +85,30 @@ class Roles(red_commands.Cog):
                     amount = float(match[1]) # number of shares
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
-                    if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in message.guild.get_member(message.author.id).roles) :
-                        add_role(ctx.guild, ctx.channel, 'Investor', name)
+                    member_roles = message.guild.get_member(message.author.id).roles)
+                    if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in member_roles :
+                        await add_role(ctx.guild, ctx.channel, 'Investor', name)
                         role_changed_to = 'Investor'
-                    if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in message.guild.get_member(message.author.id).roles):
-                        add_role(ctx.guild, ctx.channel, 'Bronze', name)
+                    if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in member_roles:
+                        await add_role(ctx.guild, ctx.channel, 'Bronze', name)
                         role_changed_to = 'Bronze'
-                        role_purged = purge_roles(ctx.guild, name)
-                    elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in message.guild.get_member(message.author.id).roles):
-                        add_role(ctx.guild,ctx.channel, 'Silver', name)
+                        role_purged = await purge_roles(ctx.guild, name)
+                    elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in member_roles:
+                        await add_role(ctx.guild,ctx.channel, 'Silver', name)
                         role_changed_to = 'Silver'
-                        role_purged = purge_roles(ctx.guild, name)
-                    elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in message.guild.get_member(message.author.id).roles):
-                        add_role(ctx.guild,ctx.channel, 'Gold', name)
+                        role_purged = await purge_roles(ctx.guild, name)
+                    elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in member_roles:
+                        await add_role(ctx.guild,ctx.channel, 'Gold', name)
                         role_changed_to = 'Gold'
-                        role_purged = purge_roles(ctx.guild, name)
-                    elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in message.guild.get_member(message.author.id).roles):
-                        add_role(ctx.guild,ctx.channel, 'Platinum', name)
+                        role_purged = await purge_roles(ctx.guild, name)
+                    elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in member_roles:
+                        await add_role(ctx.guild,ctx.channel, 'Platinum', name)
                         role_changed_to = 'Platinum'
-                        role_purged = purge_roles(ctx.guild, name)
-                    elif amount >= 2000 and not any(role.name == 'Plutonium' for role in message.guild.get_member(message.author.id).roles):
-                        add_role(ctx.guild,ctx.channel, 'Plutonium', name)
+                        role_purged = await purge_roles(ctx.guild, name)
+                    elif amount >= 2000 and not any(role.name == 'Plutonium' for role in member_roles:
+                        await add_role(ctx.guild,ctx.channel, 'Plutonium', name)
                         role_changed_to = 'Plutonium'
-                        role_purged = purge_roles(ctx.guild, name)
+                        role_purged = await purge_roles(ctx.guild, name)
                     
                     # find the bot-action-logs channel 
                     channel = discord.utils.get(message.guild.channels, name="bot-actions-log")
