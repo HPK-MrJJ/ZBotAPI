@@ -85,7 +85,7 @@ class Roles(red_commands.Cog):
                     amount = float(match[1]) # number of shares
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
-                    member_roles = message.guild.get_member(message.author.id).roles)
+                    member_roles = message.guild.get_member(message.author.id).roles
                     if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in member_roles :
                         await add_role(ctx.guild, ctx.channel, 'Investor', name)
                         role_changed_to = 'Investor'
