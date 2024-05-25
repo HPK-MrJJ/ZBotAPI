@@ -68,7 +68,7 @@ class Roles(red_commands.Cog):
         else:
             await ctx.send('Please include an excel sheet attachment')
         embed = discord.Embed(title = "Share report", 
-                              description = f'as of {datetime.now(timezone.utc).strftime('%m/%d/%Y')} at {datetime.now(timezone.utc).strftime('%H:%M:%S')}', 
+                              description = f"as of {datetime.now(timezone.utc).strftime('%m/%d/%Y')} at {datetime.now(timezone.utc).strftime('%H:%M:%S')}", 
                               color = discord.Color.green()
                              )
         for i, name in enumerate(names):
