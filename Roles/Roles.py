@@ -72,13 +72,12 @@ class Roles(red_commands.Cog):
             
             if 'share report as of ' in message.content.lower():
                 
-                # This pattern isolates blocks in the share-report for each shareholder assuming bolded names
+                # This pattern isolates blocks in the share-report for each shareholder
                 pattern = r'([\w-]+)\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
 
                 # Find all matches in the content
-                matches = re.findall(pattern, message.content, re.IGNORE_CASE)
-                channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
-                await channel.send(message.content)
+                matches = re.findall(pattern, message.content)
+
                 for match in matches:
                     if ' - ' in match[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
                         name = match[0].split(' - ')[1].strip().lower()
@@ -112,6 +111,9 @@ class Roles(red_commands.Cog):
                         role_changed_to = 'Plutonium'
                         role_purged = await purge_roles(ctx.guild, name)
 
+                    # find the bot-actions-log channel
+                    channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
+                    
                     # log the role change
                     if role_purged:
                         await channel.send(f'Assigned {role_changed_to} to {name}.') if role_purged != '' else message.channel.send(f'Switched {name} from {role_purged} to {role_changed_to}.')
