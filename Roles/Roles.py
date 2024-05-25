@@ -69,11 +69,11 @@ class Roles(red_commands.Cog):
             await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
 
         if message.channel.id == 1202487727635832862: #This is the id of the share-report channel
-            await message.channel.send('I exist uwu') # THIS IS FOR ERROR TESTING
+            # await message.channel.send('I exist uwu') # THIS IS FOR ERROR TESTING
             if 'share report as of ' in message.content.lower():
-                await message.channel.send('My hobby is spamming this channel') # I WISH I DIDNT HAVE TO WRITE THIS STUPID STUFF
+                # await message.channel.send('My hobby is spamming this channel') # I WISH I DIDNT HAVE TO WRITE THIS STUPID STUFF
                 # This pattern isolates blocks in the share-report for each shareholder assuming bolded names
-                pattern = r'\*\*(\w+(?:\s+\w+)*)\*\*\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
+                pattern = r'([\w-]+)\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
 
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
