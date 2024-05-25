@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-import panda as pd
+import pandas as pd
 import discord
 from discord.ext import commands as discord_commands
 from discord.ext.commands import errors
