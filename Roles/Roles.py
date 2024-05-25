@@ -73,8 +73,11 @@ class Roles(red_commands.Cog):
                               description = f"as of {datetime.now(timezone.utc).strftime('%m/%d/%Y')} at {datetime.now(timezone.utc).strftime('%H:%M:%S')}", 
                               color = discord.Color.green()
                              )
+        total = 0
         for i, name in enumerate(names):
             embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
+            total += float(share[i])
+        embed.add_field(name='Total shares:', value=total,inline=False)
 
         await channel.send(embed=embed)
     
