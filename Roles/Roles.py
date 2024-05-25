@@ -76,7 +76,7 @@ class Roles(red_commands.Cog):
         total = 0
         for i, name in enumerate(names):
             embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
-            total += float(share[i])
+            total += float(shares[i])
         embed.add_field(name='Total shares:', value=total,inline=False)
 
         await channel.send(embed=embed)
