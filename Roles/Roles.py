@@ -74,7 +74,7 @@ class Roles(red_commands.Cog):
                               color = discord.Color.green()
                              )
         for i, name in enumerate(names):
-            embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}'%, inline=False)
+            embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
 
         await channel.send(embed=embed)
     
