@@ -65,8 +65,8 @@ class Roles(red_commands.Cog):
         if attachment: # Check for attachment and read the excel sheet
             attachment_data = await attachment.read()
             df = pd.read_excel(io.BytesIO(attachment_data))
-            nations = df['Nations'] # nation name
-            names = df['Names'] # discord username or NA if no discord account
+            nations = df['Nation Name'] # nation name
+            names = df['Server Name'] # discord username or NA if no discord account
             shares = df['Shares']
             stake = df['Stake']
         else:
