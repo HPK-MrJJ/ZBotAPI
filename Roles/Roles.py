@@ -1,4 +1,5 @@
-import re
+from datetime import datetime, timezone
+import panda as pd
 import discord
 from discord.ext import commands as discord_commands
 from discord.ext.commands import errors
@@ -53,6 +54,27 @@ class Roles(red_commands.Cog):
             role_be_gone = discord.util.get(guild.roles, name=tier_roles[rid_role_id])
             await member.remove_roles(role_be_gone) # purge the excess tier role
         return role_be_gone.name if role_be_gone else ''
+
+    # send this command with an excel sheet attachment of share report and the bot will send a share report and update roles
+    @commands.command(name="share_report")
+    async def make_share_report(self,ctx):
+        attachment = ctx.message.attachment
+        channel = self.bot.get_channel(1202487727635832862) # share-report channel
+        if attachment:
+            df = pd.read_excel(attachment.filename)
+            names = df['Names']
+            shares = df['Shares']
+            stake = df['Stake']
+        else:
+            await ctx.send('Please include an excel sheet attachment')
+        embed = discord.Embed(title = "Share report", 
+                              description = f'as of {datetime.now(timezone.utc).strftime('%m/%d/%Y')} at {datetime.now(timezone.utc).strftime('%H:%M:%S')}', 
+                              color = discord.Color.green()
+                             )
+        for i, name in enumerate(names):
+            embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}', inline=True)
+
+        await channel.send(embed=embed)
     
     @red_commands.Cog.listener()
     async def on_message(self, message):
@@ -66,55 +88,4 @@ class Roles(red_commands.Cog):
             await message.reply('Well fuck you too!')
             
         if 'best wishes to montrandec' in message.content.lower() or 'best wishes to r9238yfh' in message.content.lower():
-            await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
-
-        if message.channel.id == 1202487727635832862: #This is the id of the share-report channel
-            
-            if 'share report as of ' in message.content.lower():
-                
-                # This pattern isolates blocks in the share-report for each shareholder
-                pattern = r'([\w-]+)\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
-
-                # Find all matches in the content
-                matches = re.findall(pattern, message.content)
-
-                for match in matches:
-                    if ' - ' in match[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
-                        name = match[0].split(' - ')[1].strip().lower()
-                    else:
-                        name = match[0]  # server name
-                    amount = float(match[1]) # number of shares
-
-                    # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
-                    member_roles = message.guild.get_member(message.author.id).roles
-                    if amount > 0 and amount < 10 and not any(role.name == 'Investor' for role in member_roles) :
-                        await add_role(ctx.guild, ctx.channel, 'Investor', name)
-                        role_changed_to = 'Investor'
-                    if amount >= 10 and amount < 100 and not any(role.name == 'Bronze' for role in member_roles):
-                        await add_role(ctx.guild, ctx.channel, 'Bronze', name)
-                        role_changed_to = 'Bronze'
-                        role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 100 and amount < 500 and not any(role.name == 'Silver' for role in member_roles):
-                        await add_role(ctx.guild,ctx.channel, 'Silver', name)
-                        role_changed_to = 'Silver'
-                        role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 500 and amount < 1000 and not any(role.name == 'Gold' for role in member_roles):
-                        await add_role(ctx.guild,ctx.channel, 'Gold', name)
-                        role_changed_to = 'Gold'
-                        role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 1000 and amount < 2000 and not any(role.name == 'Platinum' for role in member_roles):
-                        await add_role(ctx.guild,ctx.channel, 'Platinum', name)
-                        role_changed_to = 'Platinum'
-                        role_purged = await purge_roles(ctx.guild, name)
-                    elif amount >= 2000 and not any(role.name == 'Plutonium' for role in member_roles):
-                        await add_role(ctx.guild,ctx.channel, 'Plutonium', name)
-                        role_changed_to = 'Plutonium'
-                        role_purged = await purge_roles(ctx.guild, name)
-
-                    # find the bot-actions-log channel
-                    channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
-                    
-                    # log the role change
-                    if role_purged:
-                        await channel.send(f'Assigned {role_changed_to} to {name}.') if role_purged != '' else message.channel.send(f'Switched {name} from {role_purged} to {role_changed_to}.')
-                    
+            await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')                 
