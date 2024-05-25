@@ -58,7 +58,7 @@ class Roles(red_commands.Cog):
     async def on_message(self, message):
         first_char = message.content[0]
         ctx = await self.bot.get_context(message)
-        if not first_char.isalpha():
+        if message.author.bot or not first_char.isalpha():
             return
 
         # Check if the message contains the trigger phrase
