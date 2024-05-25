@@ -69,24 +69,22 @@ class Roles(red_commands.Cog):
             await message.reply('Amen, may he soon return to the Fund with a trouble-free mind.')
 
         if message.channel.id == 1202487727635832862: #This is the id of the share-report channel
-            # await message.channel.send('I exist uwu') # THIS IS FOR ERROR TESTING
+            
             if 'share report as of ' in message.content.lower():
-                # await message.channel.send('My hobby is spamming this channel') # I WISH I DIDNT HAVE TO WRITE THIS STUPID STUFF
+                
                 # This pattern isolates blocks in the share-report for each shareholder assuming bolded names
                 pattern = r'([\w-]+)\nTotal Stake: \d+%\n# of Shares: (\d+\.\d+)'
 
                 # Find all matches in the content
                 matches = re.findall(pattern, message.content, re.IGNORE_CASE)
                 channel = discord.utils.get(message.guild.channels, name="bot-actions-log") # find bot-actions-log channel
-                for matchhh in matches:
-                    await channel.send(f'{matchhh}test test bork bork') # THIS IS FOR ERROR TESTING
-                
-                for matchh in matches:
-                    if ' - ' in matchh[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
-                        name = matchh[0].split(' - ')[1].strip().lower()
+                await channel.send(message.content)
+                for match in matches:
+                    if ' - ' in match[0]: # the ' - ' is used to separate nation name from server name when they differ. {nation name} - {server name}
+                        name = match[0].split(' - ')[1].strip().lower()
                     else:
-                        name = matchh[0]  # server name
-                    amount = float(matchh[1]) # number of shares
+                        name = match[0]  # server name
+                    amount = float(match[1]) # number of shares
 
                     # Assign the appropriate roles depending on the number of shares. Always check for investor and then only add the highest subsequent role.
                     member_roles = message.guild.get_member(message.author.id).roles
