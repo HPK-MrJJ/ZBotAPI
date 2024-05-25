@@ -1,3 +1,4 @@
+import io
 from datetime import datetime, timezone
 import pandas as pd
 import discord
@@ -61,7 +62,8 @@ class Roles(red_commands.Cog):
         attachment = ctx.message.attachments[0]
         channel = self.bot.get_channel(1202487727635832862) # share-report channel
         if attachment:
-            df = pd.read_excel(attachment.filename)
+            attachment_data = await attachment.read()
+            df = pd.read_excel(io.BytesIO(attachment_data))
             names = df['Names']
             shares = df['Shares']
             stake = df['Stake']
