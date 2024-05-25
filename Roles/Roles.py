@@ -56,7 +56,7 @@ class Roles(red_commands.Cog):
         return role_be_gone.name if role_be_gone else ''
 
     # send this command with an excel sheet attachment of share report and the bot will send a share report and update roles
-    @commands.command(name="share_report")
+    @red_commands.command(name="share_report")
     async def make_share_report(self,ctx):
         attachment = ctx.message.attachment
         channel = self.bot.get_channel(1202487727635832862) # share-report channel
