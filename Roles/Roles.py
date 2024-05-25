@@ -58,7 +58,7 @@ class Roles(red_commands.Cog):
     # send this command with an excel sheet attachment of share report and the bot will send a share report and update roles
     @red_commands.command(name="share_report")
     async def make_share_report(self,ctx):
-        attachment = ctx.message.attachment
+        attachment = ctx.message.attachments[0]
         channel = self.bot.get_channel(1202487727635832862) # share-report channel
         if attachment:
             df = pd.read_excel(attachment.filename)
