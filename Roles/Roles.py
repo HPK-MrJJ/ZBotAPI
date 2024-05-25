@@ -57,29 +57,64 @@ class Roles(red_commands.Cog):
         return role_be_gone.name if role_be_gone else ''
 
     # send this command with an excel sheet attachment of share report and the bot will send a share report and update roles
+    @is_owner_overridable()
     @red_commands.command(name="share_report")
     async def make_share_report(self,ctx):
         attachment = ctx.message.attachments[0]
         channel = self.bot.get_channel(1202487727635832862) # share-report channel
-        if attachment:
+        if attachment: # Check for attachment and read the excel sheet
             attachment_data = await attachment.read()
             df = pd.read_excel(io.BytesIO(attachment_data))
-            names = df['Names']
+            nations = df['Nations'] # nation name
+            names = df['Names'] # discord username or NA if no discord account
             shares = df['Shares']
             stake = df['Stake']
         else:
             await ctx.send('Please include an excel sheet attachment')
+            return
         embed = discord.Embed(title = "Share report", 
                               description = f"as of {datetime.now(timezone.utc).strftime('%m/%d/%Y')} at {datetime.now(timezone.utc).strftime('%H:%M:%S')} UTC", 
                               color = discord.Color.green()
                              )
         total = 0
-        for i, name in enumerate(names):
-            embed.add_field(name=name, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
+        for i, nation in enumerate(nation):
+            embed.add_field(name=nation, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
             total += float(shares[i])
-        embed.add_field(name='Total shares:', value=total,inline=False)
+        embed.add_field(name='Total shares:', value=round(total,4),inline=False)
 
         await channel.send(embed=embed)
+
+        channel = self.bot.get_channel(1243348183841505380) # bot-actions-log channel
+        for i,name in enumerate(names):
+            if name == 'NA':
+                continue
+            member = discord.utils.find(lambda m: m.name == name, ctx.guild.members)
+            roles = member.roles
+            roles_str = []
+            for role in roles:
+                roles_str.append(role.name)
+            if 'Investor' not in roles_str: # always check for investor and then only the lowest tier
+                await add_role(ctx.guild, ctx.channel, 'Investor', name)
+                await channel.send(f'Added investor role to {name}.')
+            if 'Bronze' not in roles_str and shares[i] < 100:
+                await add_role(ctx.guild, ctx.channel, 'Bronze', name)
+                await channel.send(f'Added bronze role to {name}.')
+            elif 'Silver' not in roles_str and shares[i] < 500 and shares[i] >= 100:
+                await add_role(ctx.guild, ctx.channel, 'Silver', name)
+                await channel.send(f'Added silver role to {name}.')
+            elif 'Gold' not in roles_str and shares[i] < 1000 and shares[i] >= 500:
+                await add_role(ctx.guild, ctx.channel, 'Gold', name)
+                await channel.send(f'Added gold role to {name}.')
+            elif 'Platinum' not in roles_str and shares[i] < 2000 and shares[i] >= 1000:
+                await add_role(ctx.guild, ctx.channel, 'Platinum', name)
+                await channel.send(f'Added platinum role to {name}.')
+            elif 'Plutonium' not in roles_str and shares[i] >= 2000:
+                await add_role(ctx.guild, ctx.channel, 'Plutonium', name)
+                await channel.send(f'Added plutonium role to {name}.')
+            purged_role = purge_roles(name) # get rid of the old role if needed
+            if purged_role != '':
+                await channel.send(f'Removed {purged_role} from {name}')
+                
     
     @red_commands.Cog.listener()
     async def on_message(self, message):
