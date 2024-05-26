@@ -96,6 +96,7 @@ class Roles(red_commands.Cog):
             roles_str = []
             for role in roles:
                 roles_str.append(role.name)
+            tier_changed_to = None
             if 'Investor' not in roles_str: # always check for investor and then only the lowest tier
                 await self.add_role(ctx.guild, ctx.channel, 'Investor', name)
                 await channel.send(f'Added investor role to {name}.')
