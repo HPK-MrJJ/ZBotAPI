@@ -114,12 +114,13 @@ class Roles(red_commands.Cog):
             elif 'Platinum' not in roles_str and shares[i] < 2000 and shares[i] >= 1000:
                 await self.add_role(ctx.guild, ctx.channel, 'Platinum', name)
                 await channel.send(f'Added platinum role to {name}.')
-                tier_changed_to = Platinum
+                tier_changed_to = 'Platinum'
             elif 'Plutonium' not in roles_str and shares[i] >= 2000:
                 await self.add_role(ctx.guild, ctx.channel, 'Plutonium', name)
                 await channel.send(f'Added plutonium role to {name}.')
-                tier_changed_to = Plutonium
-            purged_role = await self.purge_roles(ctx.guild, name, tier_changed_to) # get rid of the old role if needed
+                tier_changed_to = 'Plutonium'
+            if tier_changed_to:
+                purged_role = await self.purge_roles(ctx.guild, name, tier_changed_to) # get rid of the old role if needed
             if purged_role != '':
                 await channel.send(f'Removed {purged_role} from {name}')
                 
