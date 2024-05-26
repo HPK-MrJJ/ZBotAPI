@@ -30,7 +30,7 @@ class Roles(red_commands.Cog):
             await channel.send("Please give a valid role name.")
             return
             
-        member = guild.get_member_named(username)  # Member object that you want to add the role to
+        member = guild.get_member_named(str(username))  # Member object that you want to add the role to
         if member is None:
             await channel.send(f"Member {username} not found.")
             return
