@@ -77,7 +77,7 @@ class Roles(red_commands.Cog):
                               color = discord.Color.green()
                              )
         total = 0
-        for i, nation in enumerate(nation):
+        for i, nation in enumerate(nations):
             embed.add_field(name=nation, value=f'Shares: {shares[i]}\nStake: {stake[i]}%', inline=False)
             total += float(shares[i])
         embed.add_field(name='Total shares:', value=round(total,4),inline=False)
