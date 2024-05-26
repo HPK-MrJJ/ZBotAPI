@@ -92,6 +92,9 @@ class Roles(red_commands.Cog):
             if name == 'NA':
                 continue
             member = discord.utils.find(lambda m: m.name == name, ctx.guild.members)
+            if not member:
+                await channel.send(f'Error! {name} is not connected to any member here!')
+                return
             roles = member.roles
             roles_str = []
             for role in roles:
