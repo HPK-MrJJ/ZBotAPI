@@ -43,7 +43,7 @@ class Roles(red_commands.Cog):
 
     # purge excess tier roles
     # Returns the string name of the Role purged or ''
-    async def purge_roles(self, guild, username):
+    async def purge_roles(self, guild, username, new_role):
         tier_roles = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Plutonium']
         has_role_ids = [] # stores the indexes that correspond to tier roles above that the member has
         member = await guild.get_member_named(username).roles
@@ -51,8 +51,11 @@ class Roles(red_commands.Cog):
             if role.name in tier_roles: 
                 has_role_ids.append(tier_roles.index(role.name)) # if the role is a tier role, add its index to the tracker
         if len(has_role_ids) > 1:
-            rid_role_id = min(has_role_ids) # the id of the role to be purged
-            role_be_gone = discord.util.get(guild.roles, name=tier_roles[rid_role_id])
+            for role in role_ids:
+                if role != new_role:
+                    str_role_be_gone = role
+                    break
+            role_be_gone = discord.util.get(guild.roles, name=str_role_be_gone)
             await member.remove_roles(role_be_gone) # purge the excess tier role
         return role_be_gone.name if role_be_gone else ''
 
@@ -99,19 +102,24 @@ class Roles(red_commands.Cog):
             if 'Bronze' not in roles_str and shares[i] < 100:
                 await self.add_role(ctx.guild, ctx.channel, 'Bronze', name)
                 await channel.send(f'Added bronze role to {name}.')
+                tier_changed_to = 'Bronze'
             elif 'Silver' not in roles_str and shares[i] < 500 and shares[i] >= 100:
                 await self.add_role(ctx.guild, ctx.channel, 'Silver', name)
                 await channel.send(f'Added silver role to {name}.')
+                tier_changed_to = 'Silver'
             elif 'Gold' not in roles_str and shares[i] < 1000 and shares[i] >= 500:
                 await self.add_role(ctx.guild, ctx.channel, 'Gold', name)
                 await channel.send(f'Added gold role to {name}.')
+                tier_changed_to = 'Gold'
             elif 'Platinum' not in roles_str and shares[i] < 2000 and shares[i] >= 1000:
                 await self.add_role(ctx.guild, ctx.channel, 'Platinum', name)
                 await channel.send(f'Added platinum role to {name}.')
+                tier_changed_to = Platinum
             elif 'Plutonium' not in roles_str and shares[i] >= 2000:
                 await self.add_role(ctx.guild, ctx.channel, 'Plutonium', name)
                 await channel.send(f'Added plutonium role to {name}.')
-            purged_role = self.purge_roles(ctx.guild, name) # get rid of the old role if needed
+                tier_changed_to = Plutonium
+            purged_role = await self.purge_roles(ctx.guild, name, tier_changed_to) # get rid of the old role if needed
             if purged_role != '':
                 await channel.send(f'Removed {purged_role} from {name}')
                 
