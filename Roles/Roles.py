@@ -94,22 +94,22 @@ class Roles(red_commands.Cog):
             for role in roles:
                 roles_str.append(role.name)
             if 'Investor' not in roles_str: # always check for investor and then only the lowest tier
-                await add_role(ctx.guild, ctx.channel, 'Investor', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Investor', name)
                 await channel.send(f'Added investor role to {name}.')
             if 'Bronze' not in roles_str and shares[i] < 100:
-                await add_role(ctx.guild, ctx.channel, 'Bronze', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Bronze', name)
                 await channel.send(f'Added bronze role to {name}.')
             elif 'Silver' not in roles_str and shares[i] < 500 and shares[i] >= 100:
-                await add_role(ctx.guild, ctx.channel, 'Silver', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Silver', name)
                 await channel.send(f'Added silver role to {name}.')
             elif 'Gold' not in roles_str and shares[i] < 1000 and shares[i] >= 500:
-                await add_role(ctx.guild, ctx.channel, 'Gold', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Gold', name)
                 await channel.send(f'Added gold role to {name}.')
             elif 'Platinum' not in roles_str and shares[i] < 2000 and shares[i] >= 1000:
-                await add_role(ctx.guild, ctx.channel, 'Platinum', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Platinum', name)
                 await channel.send(f'Added platinum role to {name}.')
             elif 'Plutonium' not in roles_str and shares[i] >= 2000:
-                await add_role(ctx.guild, ctx.channel, 'Plutonium', name)
+                await self.add_role(ctx.guild, ctx.channel, 'Plutonium', name)
                 await channel.send(f'Added plutonium role to {name}.')
             purged_role = self.purge_roles(ctx.guild, name) # get rid of the old role if needed
             if purged_role != '':
