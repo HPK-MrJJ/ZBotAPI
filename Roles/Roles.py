@@ -46,7 +46,7 @@ class Roles(red_commands.Cog):
     async def purge_roles(self, guild, username, new_role):
         tier_roles = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Plutonium']
         has_role_ids = [] # stores the indexes that correspond to tier roles above that the member has
-        member = await guild.get_member_named(username).roles
+        member = await guild.get_member_named(str(username)).roles
         for role.name in member : # iterate through every role
             if role.name in tier_roles: 
                 has_role_ids.append(tier_roles.index(role.name)) # if the role is a tier role, add its index to the tracker
