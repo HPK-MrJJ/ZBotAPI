@@ -111,7 +111,7 @@ class Roles(red_commands.Cog):
             elif 'Plutonium' not in roles_str and shares[i] >= 2000:
                 await add_role(ctx.guild, ctx.channel, 'Plutonium', name)
                 await channel.send(f'Added plutonium role to {name}.')
-            purged_role = purge_roles(name) # get rid of the old role if needed
+            purged_role = purge_roles(ctx.guild, name) # get rid of the old role if needed
             if purged_role != '':
                 await channel.send(f'Removed {purged_role} from {name}')
                 
