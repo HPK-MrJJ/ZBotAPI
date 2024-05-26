@@ -122,6 +122,8 @@ class Roles(red_commands.Cog):
                 tier_changed_to = 'Plutonium'
             if tier_changed_to:
                 purged_role = await self.purge_roles(ctx.guild, name, tier_changed_to) # get rid of the old role if needed
+            else:
+                purged_role = ''
             if purged_role != '':
                 await channel.send(f'Removed {purged_role} from {name}')
                 
