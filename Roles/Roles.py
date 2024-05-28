@@ -133,6 +133,8 @@ class Roles(red_commands.Cog):
     
     @red_commands.Cog.listener()
     async def on_message(self, message):
+        if len(message.content) == 0:
+            return
         first_char = message.content[0]
         ctx = await self.bot.get_context(message)
         if message.author.bot or not first_char.isalpha():
